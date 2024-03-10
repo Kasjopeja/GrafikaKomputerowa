@@ -51,7 +51,7 @@ int main()
 		"out vec4 FragColor;\n"
 		"void main()\n"
 		"{\n"
-		" FragColor = vec4(0.8f, 0.3f, 0.02f, 1.0f);\n"
+		" FragColor = vec4(0.8f, 0.8f, 0.4f, 1.0f);\n"
 		"}\n\0";
 
 	// Utwórz obiekt Vertex Shader
@@ -77,9 +77,15 @@ int main()
 	// Vertices coordinates
 	GLfloat vertices[] =
 	{
-	-0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower left corner
-	0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower right corner
-	0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f // Upper corner
+		// Pierwszy trójkąt
+		-1.0f, 0.0f, 0.0f,  // Wierzchołek 1
+		-1.0f, -1.0f, 0.0f, // Wierzchołek 2
+		0.0f, -1.0f, 0.0f,  // Wierzchołek 3
+
+		// Drugi trójkąt
+		-0.5f, 1.0f, 0.0f,  // Wierzchołek 1
+		1.0f, 1.0f, 0.0f,   // Wierzchołek 2
+		1.0f, -0.5f, 0.0f,  // Wierzchołek 3
 	};
 
 	GLuint VAO, VBO;
@@ -111,7 +117,7 @@ int main()
 		glUseProgram(shaderProgram);
 		glBindVertexArray(VAO);
 		// Narysuj trójkąt
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 		// Odśwież widok
 		glfwSwapBuffers(window);
 		glfwPollEvents();
