@@ -88,40 +88,8 @@ int main()
 		}
 	}
 
-	for (int i = 0; i < vertices.size(); i = i + 2)
-	{
-		cout << vertices[i] << " " << vertices[i + 1] << endl;
-	}
-
 	// Indices for vertices order
 	vector <GLuint> indices = { 0, 1, 2, 2, 3, 4, 4, 5, 6, 6, 7, 8, 8, 9, 10, 11, 12, 13, 13, 14, 15, 15, 16, 17, 17, 18, 19, 19, 20, 21, 22, 23, 24, 24, 25, 26, 26, 27, 28, 28, 29, 30, 30, 31, 32};
-
-	vector<GLuint> sequence;
-
-	for (int i = 0; i <= 32; i++) {
-		if (i % 4 == 0) {
-			// Every fourth number (starting from 0) is not repeated
-			// It's the beginning of a 'zag'
-			sequence.push_back(i);
-		}
-		else if ((i + 1) % 4 == 0) {
-			// Every fourth number (offset by 1) is the end of a 'zig'
-			// and is not repeated
-			sequence.push_back(i);
-			sequence.push_back(i + 1); // Begin next 'zag'
-		}
-		else {
-			// Middle number of a 'zig' or first number of a 'zag'
-			sequence.push_back(i);
-			sequence.push_back(i);
-		}
-	}
-
-	// Output the sequence
-	for (int num : sequence) {
-		cout << num << ", ";
-	}
-	cout << endl;
 
 	GLsizei elemSize = indices.size() * sizeof(GLuint);
 
