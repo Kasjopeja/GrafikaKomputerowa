@@ -3,9 +3,10 @@
 std::string get_file_contents(const char* filename)
 {
     std::ifstream in(filename, std::ios::binary);
-    if (!in)
-    {
-        throw std::runtime_error("Failed to open file: " + std::string(filename));
+    if (!in) {
+        std::string error_message = "Failed to open file: " + std::string(filename);
+        perror(error_message.c_str()); // This will print the system error message
+        throw std::runtime_error(error_message);
     }
 
     std::string contents;

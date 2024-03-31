@@ -64,10 +64,14 @@ int main()
 	VBO1.Unbind();
 	EBO1.Unbind();
 
+
 	while (!glfwWindowShouldClose(window))
 	{
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+
+		shaderProgram.Activate();
+		VAO1.Bind();
 
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
@@ -88,8 +92,6 @@ int main()
 	glfwDestroyWindow(window);
 	// Terminate GLFW before ending the program
 	glfwTerminate();
-
-
 
 
 	return 0;

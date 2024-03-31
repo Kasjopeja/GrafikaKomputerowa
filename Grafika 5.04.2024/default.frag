@@ -1,5 +1,5 @@
 #version 330 core
-in ver3 color;
+in ver3 Color;
 out vec4 FragColor;
 
 void main()
