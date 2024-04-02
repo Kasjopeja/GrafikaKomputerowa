@@ -1,6 +1,12 @@
 #version 330 core
-in ver3 Color;
+
+// Outputs colors in RGBA
 out vec4 FragColor;
+
+
+// Inputs the color from the Vertex Shader
+in vec3 color;
+
 
 void main()
 {

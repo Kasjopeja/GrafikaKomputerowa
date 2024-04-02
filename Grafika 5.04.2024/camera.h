@@ -25,4 +25,4 @@ public:
 		const char* uniform);
 	void Inputs(GLFWwindow* window);
 };
-#endif
+#endif

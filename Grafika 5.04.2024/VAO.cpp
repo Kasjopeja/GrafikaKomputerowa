@@ -8,10 +8,10 @@ VAO::VAO()
 void VAO::LinkVBO(VBO& VBO, GLuint posisionLocation, GLuint colorLocation)
 {
 	VBO.Bind();
-	glEnableVertexAttribArray(posisionLocation);
 	glVertexAttribPointer(posisionLocation, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(colorLocation);
+	glEnableVertexAttribArray(posisionLocation);
 	glVertexAttribPointer(colorLocation, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(colorLocation);
 	VBO.Unbind();
 }
 
