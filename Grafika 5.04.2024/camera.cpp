@@ -18,22 +18,28 @@ void Camera::Matrix(float FOVdeg, float nearPlane, float farPlane, Shader& shade
 }
 void Camera::Inputs(GLFWwindow* window)
 {
+	float speed = 0.001f;
+
 	// Obsluga klawiszy
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
 		Position += speed * Orientation;
+		//PrintPosition();
 	}
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 	{
-		Position += speed * -glm::normalize(glm::cross(Orientation, Up));
+		Position += 0.001f * -glm::normalize(glm::cross(Orientation, Up));
+		//PrintPosition();
 	}
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 	{
 		Position += speed * -Orientation;
+		//PrintPosition();
 	}
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 	{
 		Position += speed * glm::normalize(glm::cross(Orientation, Up));
+		//PrintPosition();
 	}
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
 	{
@@ -45,16 +51,10 @@ void Camera::Inputs(GLFWwindow* window)
 	}
 	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
 	{
-		Position = glm::vec3(0.0f, 0.0f, 2.0f);
+		Position = glm::vec3(2.0f, 2.0f, 2.0f);
+		Orientation = glm::vec3(-1.0f, -1.0f, -1.0f);
 	}
-	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-	{
-		speed = 0.4f;
-	}
-	else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE)
-	{
-		speed = 0.1f;
-	}
+
 	// Handles mouse inputs
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 	{
@@ -98,4 +98,11 @@ void Camera::Inputs(GLFWwindow* window)
 		// Makes sure the next time the camera looks around it doesn’t jump
 		firstClick = true;
 	}
+}
+
+void Camera::PrintPosition() {
+	std::cout << " Camera Position: "
+		<< "X: " << Position.x << ", "
+		<< "Y: " << Position.y << ", "
+		<< "Z: " << Position.z << std::endl;
 }
