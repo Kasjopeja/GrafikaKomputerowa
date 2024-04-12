@@ -17,25 +17,63 @@ const unsigned int width = 800;
 const unsigned int height = 800;
 
 // Vertices coordinates
-GLfloat vertices[] =
-{ //     COORDINATES     /        COLORS      /   TexCoord  //
-	-0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	0.0f, 0.0f,
-	-0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	5.0f, 0.0f,
-	 0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	0.0f, 0.0f,
-	 0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	5.0f, 0.0f,
-	 0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	2.5f, 5.0f
+GLfloat vertices[] = {
+	// Positions          // Colors          // Texture Coords
+	// Front face
+	-0.5f, -0.5f,  0.5f,  0.83f, 0.70f, 0.44f,  0.0f, 0.0f, // Bottom-left
+	 0.5f, -0.5f,  0.5f,  0.83f, 0.70f, 0.44f,  1.0f, 0.0f, // Bottom-right
+	 0.5f,  0.5f,  0.5f,  0.83f, 0.70f, 0.44f,  1.0f, 1.0f, // Top-right
+	-0.5f,  0.5f,  0.5f,  0.83f, 0.70f, 0.44f,  0.0f, 1.0f, // Top-left
+
+	// Right face
+	 0.5f, -0.5f,  0.5f,  0.83f, 0.70f, 0.44f,  0.0f, 0.0f, // Bottom-left
+	 0.5f, -0.5f, -0.5f,  0.83f, 0.70f, 0.44f,  1.0f, 0.0f, // Bottom-right
+	 0.5f,  0.5f, -0.5f,  0.83f, 0.70f, 0.44f,  1.0f, 1.0f, // Top-right
+	 0.5f,  0.5f,  0.5f,  0.83f, 0.70f, 0.44f,  0.0f, 1.0f, // Top-left
+
+	 // Back face
+	  0.5f, -0.5f, -0.5f,  0.83f, 0.70f, 0.44f,  0.0f, 0.0f, // Bottom-left
+	 -0.5f, -0.5f, -0.5f,  0.83f, 0.70f, 0.44f,  1.0f, 0.0f, // Bottom-right
+	 -0.5f,  0.5f, -0.5f,  0.83f, 0.70f, 0.44f,  1.0f, 1.0f, // Top-right
+	  0.5f,  0.5f, -0.5f,  0.83f, 0.70f, 0.44f,  0.0f, 1.0f, // Top-left
+
+	  // Left face
+	  -0.5f, -0.5f, -0.5f,  0.83f, 0.70f, 0.44f,  0.0f, 0.0f, // Bottom-left
+	  -0.5f, -0.5f,  0.5f,  0.83f, 0.70f, 0.44f,  1.0f, 0.0f, // Bottom-right
+	  -0.5f,  0.5f,  0.5f,  0.83f, 0.70f, 0.44f,  1.0f, 1.0f, // Top-right
+	  -0.5f,  0.5f, -0.5f,  0.83f, 0.70f, 0.44f,  0.0f, 1.0f, // Top-left
+
+	  // Top face
+	  -0.5f,  0.5f,  0.5f,  0.92f, 0.86f, 0.76f,  0.0f, 0.0f, // Bottom-left
+	   0.5f,  0.5f,  0.5f,  0.92f, 0.86f, 0.76f,  1.0f, 0.0f, // Bottom-right
+	   0.5f,  0.5f, -0.5f,  0.92f, 0.86f, 0.76f,  1.0f, 1.0f, // Top-right
+	  -0.5f,  0.5f, -0.5f,  0.92f, 0.86f, 0.76f,  0.0f, 1.0f, // Top-left
+
+	  // Bottom face
+	  -0.5f, -0.5f, -0.5f,  0.83f, 0.70f, 0.44f,  1.0f, 1.0f, // Top-right
+	   0.5f, -0.5f, -0.5f,  0.83f, 0.70f, 0.44f,  0.0f, 1.0f, // Top-left
+	   0.5f, -0.5f,  0.5f,  0.83f, 0.70f, 0.44f,  0.0f, 0.0f, // Bottom-left
+	  -0.5f, -0.5f,  0.5f,  0.83f, 0.70f, 0.44f,  1.0f, 0.0f  // Bottom-right
 };
 
+
 // Indices for vertices order
-GLuint indices[] =
-{
-	0, 1, 2,
-	0, 2, 3,
-	0, 1, 4,
-	1, 2, 4,
-	2, 3, 4,
-	3, 0, 4
+GLuint indices[] = {
+	// Front face
+	0, 1, 2,    0, 2, 3,
+	// Right face
+	4, 5, 6,    4, 6, 7,
+	// Back face
+	8, 9, 10,   8, 10, 11,
+	// Left face
+	12, 13, 14, 12, 14, 15,
+	// Top face
+	16, 17, 18, 16, 18, 19,
+	// Bottom face
+	20, 21, 22, 20, 22, 23
 };
+
+
 
 int main()
 {
