@@ -5,6 +5,7 @@
 #include<glm/glm.hpp>
 #include<glm/gtc/matrix_transform.hpp>
 #include<glm/gtc/type_ptr.hpp>
+#include <cmath>
 
 #include"Texture.h"
 #include"shaderClass.h"
@@ -16,6 +17,24 @@
 
 const unsigned int width = 800;
 const unsigned int height = 800;
+
+// Light movement parameters
+float lightRadius = 2.0f;  // Promień orbity światła może być mniejszy, jeśli sześcian jest mniejszy
+float lightHeight = 1.5f;  // Wysokość światła nad sześcianem
+float lightSpeed = 1.0f;   // Szybkość obrotu światła (radiany na sekundę)
+float lightAngle = 0.0f;   // Początkowy kąt w radianach
+
+// Function to update light position
+void updateLightPosition(float deltaTime, glm::vec3& lightPos) {
+	lightAngle += lightSpeed * deltaTime;
+	if (lightAngle > 2 * 3.14159265358979323846f) {
+		lightAngle -= 2 * 3.14159265358979323846f;
+	}
+
+	lightPos.x = lightRadius * cos(lightAngle);
+	lightPos.z = lightRadius * sin(lightAngle);
+	lightPos.y = lightHeight;
+}
 
 GLfloat vertices[] = {
 	// Positions          // Colors          // Texture Coords  // Normals
@@ -190,9 +209,22 @@ int main()
 	// Creates camera object
 	Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
 
+	// Time tracking variables for light animation
+	float lastFrameTime = glfwGetTime();
+	float currentFrameTime;
+	float deltaTime;
+
 	// Main while loop
 	while (!glfwWindowShouldClose(window))
 	{
+		// Update time
+		currentFrameTime = glfwGetTime();
+		deltaTime = currentFrameTime - lastFrameTime;
+		lastFrameTime = currentFrameTime;
+
+		// Update the position of the light
+		updateLightPosition(deltaTime, lightPos);
+
 		// Specify the color of the background
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
 		// Clean the back buffer and depth buffer
@@ -203,31 +235,33 @@ int main()
 		// Updates and exports the camera matrix to the Vertex Shader
 		camera.updateMatrix(45.0f, 0.1f, 100.0f);
 
-
 		// Tells OpenGL which Shader Program we want to use
 		shaderProgram.Activate();
+		// Update light position in the shader
+		glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
 		// Exports the camera Position to the Fragment Shader for specular lighting
 		glUniform3f(glGetUniformLocation(shaderProgram.ID, "camPos"), camera.Position.x, camera.Position.y, camera.Position.z);
 		// Export the camMatrix to the Vertex Shader of the pyramid
 		camera.Matrix(shaderProgram, "camMatrix");
-		// Binds texture so that is appears in rendering
+		// Binds texture so that it appears in rendering
 		diamondTex.Bind();
 		// Bind the VAO so OpenGL knows to use it
 		VAO1.Bind();
 		// Draw primitives, number of indices, datatype of indices, index of indices
 		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(int), GL_UNSIGNED_INT, 0);
 
-
-
-		// Tells OpenGL which Shader Program we want to use
+		// Activate the shader for the light cube
 		lightShader.Activate();
+		// Update light position and model transformation in the light shader
+		glm::mat4 lightModel = glm::mat4(1.0f);
+		lightModel = glm::translate(lightModel, lightPos);
+		glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "model"), 1, GL_FALSE, glm::value_ptr(lightModel));
 		// Export the camMatrix to the Vertex Shader of the light cube
 		camera.Matrix(lightShader, "camMatrix");
 		// Bind the VAO so OpenGL knows to use it
 		lightVAO.Bind();
 		// Draw primitives, number of indices, datatype of indices, index of indices
 		glDrawElements(GL_TRIANGLES, sizeof(lightIndices) / sizeof(int), GL_UNSIGNED_INT, 0);
-
 
 		// Swap the back buffer with the front buffer
 		glfwSwapBuffers(window);

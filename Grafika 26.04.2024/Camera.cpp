@@ -31,7 +31,6 @@ void Camera::Matrix(Shader& shader, const char* uniform)
 }
 
 
-
 void Camera::Inputs(GLFWwindow* window)
 {
 	float speed = 0.001f;
