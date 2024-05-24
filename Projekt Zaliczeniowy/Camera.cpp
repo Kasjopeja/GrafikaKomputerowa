@@ -16,7 +16,14 @@ void Camera::Matrix(float FOVdeg, float nearPlane, float farPlane, Shader& shade
 	glUniformMatrix4fv(glGetUniformLocation(shader.ID, uniform), 1, GL_FALSE,
 		glm::value_ptr(projection * view));
 }
-void Camera::Inputs(GLFWwindow* window)
+
+void Camera::Follow(glm::vec3 targetPosition)
+{
+	Position = targetPosition + glm::vec3(0.0f, 5.0f, 5.0f); // Adjust offset as needed
+	Orientation = glm::normalize(targetPosition - Position);
+}
+
+void Camera::Inputs(GLFWwindow* window, glm::vec3 planetPositions[])
 {
 	float speed = 0.01f;
 
@@ -28,7 +35,7 @@ void Camera::Inputs(GLFWwindow* window)
 	}
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 	{
-		Position += 0.001f * -glm::normalize(glm::cross(Orientation, Up));
+		Position += speed * -glm::normalize(glm::cross(Orientation, Up));
 		//PrintPosition();
 	}
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
@@ -53,6 +60,15 @@ void Camera::Inputs(GLFWwindow* window)
 	{
 		Position = glm::vec3(0.0f, 10.0f, 10.0f);
 		Orientation = glm::vec3(0.0f, -1.0f, -1.0f);
+	}
+
+	// Handle camera follow keys (1 to 9)
+	for (int i = GLFW_KEY_1; i <= GLFW_KEY_9; i++)
+	{
+		if (glfwGetKey(window, i) == GLFW_PRESS)
+		{
+			Follow(planetPositions[i - GLFW_KEY_1]);
+		}
 	}
 
 	// Handles mouse inputs
