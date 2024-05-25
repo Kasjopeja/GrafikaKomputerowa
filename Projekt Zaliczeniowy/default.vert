@@ -26,6 +26,7 @@ uniform mat4 modelMatrix;
 
 void main()
 {
+
     // calculates current position
 	crntPos = vec3(modelMatrix * vec4(aPos, 1.0f));
     // Outputs the positions/coordinates of all vertices
@@ -35,6 +36,6 @@ void main()
 	color = aColor;
 	// Assigns the texture coordinates from the Vertex Data to "texCoord"
 	texCoord = aTex;
-	// Assigns the normal from the Vertex Data to "Normal"
-	Normal = aNormal;
+	 // Transform the normal by the inverse transpose of the model matrix
+    Normal = mat3(transpose(inverse(modelMatrix))) * aNormal;
 }

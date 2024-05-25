@@ -24,27 +24,29 @@ uniform vec3 camPos;
 
 void main()
 {
-    // ambient lighting
-    float ambient = 0.20f;
+    // Ambient lighting
+    float ambientStrength = 0.20f;
+    vec3 ambient = ambientStrength * lightColor.rgb;
 
-    // diffuse lighting
+    // Diffuse lighting
     vec3 normal = normalize(Normal);
     vec3 lightDirection = normalize(lightPos - crntPos);
-    float diffuse = max(dot(normal, lightDirection), 0.0f);
+    float diff = max(dot(normal, lightDirection), 0.0f);
+    vec3 diffuse = diff * lightColor.rgb;
 
-    // specular lighting
-    float specularLight = 0.50f;
+    // Specular lighting
+    float specularStrength = 0.50f;
     vec3 viewDirection = normalize(camPos - crntPos);
     vec3 reflectionDirection = reflect(-lightDirection, normal);
-    float specAmount = pow(max(dot(viewDirection, reflectionDirection), 0.0f), 8);
-    float specular = specAmount * specularLight;
+    float spec = pow(max(dot(viewDirection, reflectionDirection), 0.0f), 8);
+    vec3 specular = specularStrength * spec * lightColor.rgb;
 
-    // Blend textures
-    vec4 texColor0 = texture(tex0, texCoord);
-    vec4 texColor1 = texture(tex1, texCoord);
-    vec4 finalTexColor = mix(texColor0, texColor1, 0.5); // Blending textures with equal weight
+    // Combine all three lighting components
+    vec3 lighting = (ambient + diffuse + specular);
 
-    // outputs final color
-    vec3 lighting = (ambient + diffuse + specular) * vec3(lightColor);
-    FragColor = 2 * finalTexColor * vec4(lighting, 1.0);
+    // Apply texture color
+    vec4 texColor = texture(tex0, texCoord);
+
+    // Final color output
+    FragColor = 1.5 * vec4(texColor.rgb * lighting, texColor.a);
 }

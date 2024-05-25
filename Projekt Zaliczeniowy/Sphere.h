@@ -22,7 +22,6 @@ public:
     ~Sphere();
 
     void Draw(glm::mat4);
-    void Draw(glm::mat4,bool);
 
 private:
     void calculateSphere(float radius, int stackCount, int sectorCount);
