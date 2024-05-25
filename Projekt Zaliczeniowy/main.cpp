@@ -51,6 +51,7 @@ int main()
 
     // Generates Shader object using shaders default.vert and default.frag
     Shader shaderProgram("default.vert", "default.frag");
+    Shader lightShader("light.vert", "light.frag");
 
     // Camera object
     Camera camera(mode->width, mode->height, glm::vec3(0.0f, 10.0f, 10.0f));
@@ -104,6 +105,11 @@ int main()
     // Main loop
     while (!glfwWindowShouldClose(window))
     {
+        // Exit program on ESC key press
+        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        {
+            glfwSetWindowShouldClose(window, true);
+        }
 
         // Input handling
         camera.Inputs(window, planetPositions);
