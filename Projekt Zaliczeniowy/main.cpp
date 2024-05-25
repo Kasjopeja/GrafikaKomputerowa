@@ -60,7 +60,7 @@ int main()
 
     // Texture
     Texture diamondTex("diamond_block.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE); // placeholder if needed
-    Texture skyboxTex("skybox.jpeg", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE);
+    Texture skyboxTex("2k_stars_milky_way.jpg", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE);
     Texture sunTex("planets/2k_sun.jpg", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE);
 
     Texture mercuryTex("planets/2k_mercury.jpg", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE);
@@ -75,6 +75,7 @@ int main()
 
     Sphere skybox(shaderProgram, skyboxTex, 50.0f, 36, 18);
     glm::mat4 skyboxModel = glm::mat4(1.0f);
+    skyboxModel = glm::rotate(skyboxModel, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 1.0f)); // Align textures
 
     // Create spheres
     Sphere sun(shaderProgram, sunTex, 0.5f, 36, 18);
