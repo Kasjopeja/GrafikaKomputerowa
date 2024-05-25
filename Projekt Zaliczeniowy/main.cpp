@@ -59,8 +59,8 @@ int main()
     glm::vec3 planetPositions[9];
 
     // Texture
+    Texture diamondTex("diamond_block.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE); // placeholder if needed
     Texture skyboxTex("skybox.jpeg", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE);
-    Texture diamondTex("diamond_block.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
     Texture sunTex("planets/2k_sun.jpg", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE);
 
     Texture mercuryTex("planets/2k_mercury.jpg", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE);
@@ -91,12 +91,12 @@ int main()
     // Initialize variables for orbit and self-rotation
     float mercuryOrbitAngle = 0.0f, venusOrbitAngle = 0.0f, earthOrbitAngle = 0.0f, marsOrbitAngle = 0.0f, jupiterOrbitAngle = 0.0f, saturnOrbitAngle = 0.0f, uranusOrbitAngle = 0.0f, neptuneOrbitAngle = 0.0f;
     float mercurySelfAngle = 0.0f, venusSelfAngle = 0.0f, earthSelfAngle = 0.0f, marsSelfAngle = 0.0f, jupiterSelfAngle = 0.0f, saturnSelfAngle = 0.0f, uranusSelfAngle = 0.0f, neptuneSelfAngle = 0.0f;
-    float moonOrbitAngle = 0.0f, moonSelfAngle = 0.0f; 
+    float moonOrbitAngle = 0.0f, moonSelfAngle = 0.0f; // Added moon angles
     float mercuryOrbitSpeed = 1.0f, venusOrbitSpeed = 0.8f, earthOrbitSpeed = 0.5f, marsOrbitSpeed = 0.3f, jupiterOrbitSpeed = 0.2f, saturnOrbitSpeed = 0.1f, uranusOrbitSpeed = 0.05f, neptuneOrbitSpeed = 0.02f;
     float mercurySelfSpeed = 1.5f, venusSelfSpeed = 1.4f, earthSelfSpeed = 1.3f, marsSelfSpeed = 1.2f, jupiterSelfSpeed = 1.1f, saturnSelfSpeed = 1.0f, uranusSelfSpeed = 0.9f, neptuneSelfSpeed = 0.8f;
-    float moonOrbitSpeed = 2.0f, moonSelfSpeed = 1.6f; 
+    float moonOrbitSpeed = 2.0f, moonSelfSpeed = 1.6f; // Added moon speeds
     float mercuryDistance = 3.0f, venusDistance = 5.0f, earthDistance = 7.0f, marsDistance = 9.0f, jupiterDistance = 12.0f, saturnDistance = 15.0f, uranusDistance = 18.0f, neptuneDistance = 20.0f;
-    float moonDistance = 0.6f; 
+    float moonDistance = 1.0f; // Added moon distance
 
 
    
@@ -140,56 +140,66 @@ int main()
         // Update and draw planets with orbit and self-rotation including y-axis oscillation
         glm::mat4 mercuryModel = glm::rotate(glm::mat4(1.0f), glm::radians(mercuryOrbitAngle), glm::vec3(0.0f, 1.0f, 0.0f));
         mercuryModel = glm::translate(mercuryModel, glm::vec3(mercuryDistance, oscillationAmplitude * sin(glm::radians(mercuryOrbitAngle)), 0.0f));
-        mercuryModel = glm::rotate(mercuryModel, glm::radians(mercurySelfAngle), glm::vec3(0.0f, 1.0f, 0.0f));
+        mercuryModel = glm::rotate(mercuryModel, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f)); // Align textures
+        mercuryModel = glm::rotate(mercuryModel, glm::radians(mercurySelfAngle), glm::vec3(0.0f, 0.0f, 1.0f)); // Self-rotation
         mercury.Draw(mercuryModel);
         planetPositions[0] = glm::vec3(mercuryModel[3]);
 
         glm::mat4 venusModel = glm::rotate(glm::mat4(1.0f), glm::radians(venusOrbitAngle), glm::vec3(0.0f, 1.0f, 0.0f));
         venusModel = glm::translate(venusModel, glm::vec3(venusDistance, oscillationAmplitude * sin(glm::radians(venusOrbitAngle)), 0.0f));
-        venusModel = glm::rotate(venusModel, glm::radians(venusSelfAngle), glm::vec3(0.0f, 1.0f, 0.0f));
+        venusModel = glm::rotate(venusModel, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f)); // Align textures
+        venusModel = glm::rotate(venusModel, glm::radians(venusSelfAngle), glm::vec3(0.0f, 0.0f, 1.0f)); // Self-rotation
         venus.Draw(venusModel);
         planetPositions[1] = glm::vec3(venusModel[3]);
 
         glm::mat4 earthModel = glm::rotate(glm::mat4(1.0f), glm::radians(earthOrbitAngle), glm::vec3(0.0f, 1.0f, 0.0f));
         earthModel = glm::translate(earthModel, glm::vec3(earthDistance, oscillationAmplitude * sin(glm::radians(earthOrbitAngle)), 0.0f));
-        earthModel = glm::rotate(earthModel, glm::radians(earthSelfAngle), glm::vec3(0.0f, 1.0f, 0.0f));
+        earthModel = glm::rotate(earthModel, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f)); // Align textures
+        earthModel = glm::rotate(earthModel, glm::radians(earthSelfAngle), glm::vec3(0.0f, 0.0f, 1.0f)); // Self-rotation
         earth.Draw(earthModel);
         planetPositions[2] = glm::vec3(earthModel[3]);
 
         // Update and draw the moon orbiting the Earth
-        glm::mat4 moonModel = glm::translate(earthModel, glm::vec3(0.0f, 0.0f, 0.0f));
+        glm::mat4 moonModel = glm::rotate(glm::mat4(1.0f), glm::radians(earthOrbitAngle), glm::vec3(0.0f, 1.0f, 0.0f)); // Follow Earth's orbit
+        moonModel = glm::translate(moonModel, glm::vec3(earthDistance, oscillationAmplitude * sin(glm::radians(earthOrbitAngle)), 0.0f));
         moonModel = glm::rotate(moonModel, glm::radians(moonOrbitAngle), glm::vec3(0.0f, 1.0f, 0.0f));
         moonModel = glm::translate(moonModel, glm::vec3(moonDistance, 0.0f, 0.0f));
-        moonModel = glm::rotate(moonModel, glm::radians(moonSelfAngle), glm::vec3(0.0f, 1.0f, 0.0f));
+        moonModel = glm::rotate(moonModel, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f)); // Align textures
+        moonModel = glm::rotate(moonModel, glm::radians(moonSelfAngle), glm::vec3(0.0f, 0.0f, 1.0f)); // Self-rotation
         moon.Draw(moonModel);
 
         glm::mat4 marsModel = glm::rotate(glm::mat4(1.0f), glm::radians(marsOrbitAngle), glm::vec3(0.0f, 1.0f, 0.0f));
         marsModel = glm::translate(marsModel, glm::vec3(marsDistance, oscillationAmplitude * sin(glm::radians(marsOrbitAngle)), 0.0f));
-        marsModel = glm::rotate(marsModel, glm::radians(marsSelfAngle), glm::vec3(0.0f, 1.0f, 0.0f));
+        marsModel = glm::rotate(marsModel, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f)); // Align textures
+        marsModel = glm::rotate(marsModel, glm::radians(marsSelfAngle), glm::vec3(0.0f, 0.0f, 1.0f)); // Self-rotation
         mars.Draw(marsModel);
         planetPositions[3] = glm::vec3(marsModel[3]);
 
         glm::mat4 jupiterModel = glm::rotate(glm::mat4(1.0f), glm::radians(jupiterOrbitAngle), glm::vec3(0.0f, 1.0f, 0.0f));
         jupiterModel = glm::translate(jupiterModel, glm::vec3(jupiterDistance, oscillationAmplitude * sin(glm::radians(jupiterOrbitAngle)), 0.0f));
-        jupiterModel = glm::rotate(jupiterModel, glm::radians(jupiterSelfAngle), glm::vec3(0.0f, 1.0f, 0.0f));
+        jupiterModel = glm::rotate(jupiterModel, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f)); // Align textures
+        jupiterModel = glm::rotate(jupiterModel, glm::radians(jupiterSelfAngle), glm::vec3(0.0f, 0.0f, 1.0f)); // Self-rotation
         jupiter.Draw(jupiterModel);
         planetPositions[4] = glm::vec3(jupiterModel[3]);
 
         glm::mat4 saturnModel = glm::rotate(glm::mat4(1.0f), glm::radians(saturnOrbitAngle), glm::vec3(0.0f, 1.0f, 0.0f));
         saturnModel = glm::translate(saturnModel, glm::vec3(saturnDistance, oscillationAmplitude * sin(glm::radians(saturnOrbitAngle)), 0.0f));
-        saturnModel = glm::rotate(saturnModel, glm::radians(saturnSelfAngle), glm::vec3(0.0f, 1.0f, 0.0f));
+        saturnModel = glm::rotate(saturnModel, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f)); // Align textures
+        saturnModel = glm::rotate(saturnModel, glm::radians(saturnSelfAngle), glm::vec3(0.0f, 0.0f, 1.0f)); // Self-rotation
         saturn.Draw(saturnModel);
         planetPositions[5] = glm::vec3(saturnModel[3]);
 
         glm::mat4 uranusModel = glm::rotate(glm::mat4(1.0f), glm::radians(uranusOrbitAngle), glm::vec3(0.0f, 1.0f, 0.0f));
         uranusModel = glm::translate(uranusModel, glm::vec3(uranusDistance, oscillationAmplitude * sin(glm::radians(uranusOrbitAngle)), 0.0f));
-        uranusModel = glm::rotate(uranusModel, glm::radians(uranusSelfAngle), glm::vec3(0.0f, 1.0f, 0.0f));
+        uranusModel = glm::rotate(uranusModel, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f)); // Align textures
+        uranusModel = glm::rotate(uranusModel, glm::radians(uranusSelfAngle), glm::vec3(0.0f, 0.0f, 1.0f)); // Self-rotation
         uranus.Draw(uranusModel);
         planetPositions[6] = glm::vec3(uranusModel[3]);
 
         glm::mat4 neptuneModel = glm::rotate(glm::mat4(1.0f), glm::radians(neptuneOrbitAngle), glm::vec3(0.0f, 1.0f, 0.0f));
         neptuneModel = glm::translate(neptuneModel, glm::vec3(neptuneDistance, oscillationAmplitude * sin(glm::radians(neptuneOrbitAngle)), 0.0f));
-        neptuneModel = glm::rotate(neptuneModel, glm::radians(neptuneSelfAngle), glm::vec3(0.0f, 1.0f, 0.0f));
+        neptuneModel = glm::rotate(neptuneModel, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f)); // Align textures
+        neptuneModel = glm::rotate(neptuneModel, glm::radians(neptuneSelfAngle), glm::vec3(0.0f, 0.0f, 1.0f)); // Self-rotation
         neptune.Draw(neptuneModel);
         planetPositions[7] = glm::vec3(neptuneModel[3]);
 
